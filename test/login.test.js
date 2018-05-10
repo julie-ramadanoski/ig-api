@@ -8,18 +8,7 @@ test('login to account', async () => {
   try {
     const ig = new IG(account.apiKey, account.isDemo)
     const result = await ig.login(account.username, account.password)
-    expect(result).toHaveProperty('accounts')
-  } catch (error) {
-    console.error(error)
-  }
-})
-
-test('login to account with encrypted password', async () => {
-  expect.hasAssertions()
-  try {
-    const ig = new IG(account.apiKey, account.isDemo)
-    const result = await ig.login(account.username, account.password, true)
-    expect(result).toHaveProperty('accounts')
+    expect(result).toHaveProperty('oauthToken')
   } catch (error) {
     console.error(error)
   }

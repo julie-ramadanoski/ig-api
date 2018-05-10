@@ -1,8 +1,9 @@
 import { create as axios } from 'axios'
 import { path } from 'rambda'
 
-const appToken = path('headers.x-security-token')
-const clientToken = path('headers.cst')
+const accessToken = path('data.oauthToken.access_token')
+const tokenType = path('data.oauthToken.token_type')
+const accountId = path('data.accountId')
 
 export function create(apiKey, isDemo) {
   return axios({
@@ -16,8 +17,8 @@ export function create(apiKey, isDemo) {
 }
 
 export function setHeaderTokens(instance, response) {
-  instance.defaults.headers['X-SECURITY-TOKEN'] = appToken(response)
-  instance.defaults.headers['CST'] = clientToken(response)
+  instance.defaults.headers['Authorization'] = `${tokenType(response)} ${accessToken(response)}`
+  instance.defaults.headers['IG-ACCOUNT-ID'] = accountId(response)
 }
 
 export default create
