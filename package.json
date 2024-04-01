@@ -1,6 +1,6 @@
 {
   "name": "ig-api",
-  "version": "0.15.0",
+  "version": "1.0.0",
   "description": "Minimalistic wrapper around IG's API",
   "homepage": "https://github.com/wagerfield/ig-api#readme",
   "author": "Matthew Wagerfield <matthew@wagerfield.com>",
@@ -14,15 +14,12 @@
   ],
   "main": "dist/index.js",
   "scripts": {
-    "clean": "gulp clean",
-    "build": "gulp build",
-    "watch": "gulp watch",
+    "build": "tsc",
     "prepare": "npm run build",
-    "precommit": "npm run lint && npm run test",
-    "lint": "superlint --verbose | snazzy",
+    "precommit": "npm run test",
     "test:coverage": "jest --coverage",
     "test:watch": "jest --watch",
-    "test": "jest"
+    "test": "jest --setupFiles dotenv/config"
   },
   "repository": {
     "type": "git",
@@ -32,23 +29,23 @@
     "url": "https://github.com/wagerfield/ig-api/issues"
   },
   "dependencies": {
-    "axios": "^0.16.2",
-    "rambda": "^0.9.0"
+    "axios": "^1.6.8"
   },
   "devDependencies": {
-    "babel-plugin-add-module-exports": "^0.2.1",
-    "babel-plugin-lodash": "^3.2.11",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-preset-env": "^1.6.0",
-    "del": "^3.0.0",
-    "dotenv": "^4.0.0",
-    "eslint": "^4.5.0",
-    "eslint-config-supermind": "^0.45.0",
-    "gulp": "^3.9.1",
-    "gulp-babel": "^7.0.0",
-    "husky": "^0.14.3",
-    "jest": "^20.0.4",
-    "snazzy": "^7.0.0",
-    "superlint": "^0.1.0"
+    "@babel/core": "^7.24.3",
+    "@babel/preset-env": "^7.24.3",
+    "@babel/preset-typescript": "^7.24.1",
+    "@types/jest": "^29.5.12",
+    "@typescript-eslint/eslint-plugin": "^7.4.0",
+    "@typescript-eslint/parser": "^7.4.0",
+    "dotenv": "^16.4.5",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.1.3",
+    "husky": "^9.0.11",
+    "jest": "^29.7.0",
+    "jest-environment-node": "^29.7.0",
+    "prettier": "^3.2.5",
+    "typescript": "^5.4.3"
   }
 }
