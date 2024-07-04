@@ -1,68 +1,70 @@
-import {AxiosInstance} from "axios";
-import {create, setHeaderTokens} from "./axios";
+import { AxiosInstance } from 'axios';
+import { create, setHeaderTokens } from './axios';
 
 type Headers = {
-    Version: number;
-    _method?: string;
+  Version: number;
+  _method?: string;
 };
 
 interface Config {
-    params?: any;
-    data?: any;
+  params?: any;
+  data?: any;
 
-    [key: string]: any;
+  [key: string]: any;
 }
 
 export default class IG {
-    private api: AxiosInstance;
+  private api: AxiosInstance;
 
-    constructor(apiKey: string, isDemo: boolean) {
-        this.api = create(apiKey, isDemo);
-    }
+  constructor(apiKey: string, isDemo: boolean) {
+    this.api = create(apiKey, isDemo);
+  }
 
-    async request(method: string, path: string, version: number, config: Config) {
-        try {
-            const headers: Headers = {Version: version || 1};
-            const response = await this.api.request({
-                ...config,
-                method,
-                url: path,
-                headers,
-            });
+  async request(method: string, path: string, version: number, config: Config) {
+    const headers: Headers = { Version: version || 1 };
+    const response = await this.api.request({
+      ...config,
+      method,
+      url: path,
+      headers,
+    });
 
-            return response.data;
-        } catch (error) {
-            throw error;
-        }
-    }
+    return response.data;
+  }
 
-    get(path: string, version: number, params: any) {
-        return this.request("get", path, version, {params});
-    }
+  get(path: string, version: number, params: any) {
+    return this.request('get', path, version, { params });
+  }
 
-    post(path: string, version: number, data: any) {
-        return this.request("post", path, version, {data});
-    }
+  post(path: string, version: number, data: any) {
+    return this.request('post', path, version, { data });
+  }
 
-    put(path: string, version: number, data: any) {
-        return this.request("put", path, version, {data});
-    }
+  put(path: string, version: number, data: any) {
+    return this.request('put', path, version, { data });
+  }
 
-    delete(path: string, version: number, data: any) {
-        return this.request("delete", path, version, {data});
-    }
+  delete(path: string, version: number, data: any) {
+    return this.request('delete', path, version, { data });
+  }
 
-    login(username: string, password: string) {
-        return this.post("session", 3, {
-            identifier: username,
-            password,
-        }).then((response) => {
-            setHeaderTokens(this.api, response);
-            return response;
-        });
-    }
+  login(username: string, password: string) {
+    const emptyHeaders = {
+      accountId: '',
+      oauthToken: { access_token: '', token_type: '' },
+    };
+    setHeaderTokens(this.api, emptyHeaders);
 
-    logout() {
-        return this.delete("session", 1, null);
-    }
+    return this.post('session', 3, {
+      identifier: username,
+      password,
+    }).then((response) => {
+      setHeaderTokens(this.api, response);
+      return response;
+    });
+  }
+
+  logout() {
+    return this.delete('session', 1, null);
+  }
 }

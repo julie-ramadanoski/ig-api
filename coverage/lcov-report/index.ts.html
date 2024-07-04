@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>14/14</span>
+                <span class='fraction'>16/16</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>14/14</span>
+                <span class='fraction'>16/16</span>
             </div>
         
             
@@ -131,7 +131,14 @@
 <a name='L66'></a><a href='#L66'>66</a>
 <a name='L67'></a><a href='#L67'>67</a>
 <a name='L68'></a><a href='#L68'>68</a>
-<a name='L69'></a><a href='#L69'>69</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a>
+<a name='L73'></a><a href='#L73'>73</a>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -150,7 +157,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -186,12 +194,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -199,73 +213,80 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import {AxiosInstance} from "axios";
-import {create, setHeaderTokens} from "./axios";
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { AxiosInstance } from 'axios';
+import { create, setHeaderTokens } from './axios';
 &nbsp;
 type Headers = {
-    Version: number;
-    _method?: string;
+  Version: number;
+  _method?: string;
 };
 &nbsp;
 interface Config {
-    params?: any;
-    data?: any;
+  params?: any;
+  data?: any;
 &nbsp;
-    [key: string]: any;
+  [key: string]: any;
 }
 &nbsp;
 export default class IG {
-    private api: AxiosInstance;
+  private api: AxiosInstance;
 &nbsp;
-    constructor(apiKey: string, isDemo: boolean) {
-        this.api = create(apiKey, isDemo);
+  constructor(apiKey: string, isDemo: boolean) {
+    this.api = create(apiKey, isDemo);
+  }
+&nbsp;
+  async request(method: string, path: string, version: number, config: Config) {
+    // eslint-disable-next-line no-useless-catch
+    try {
+      const headers: Headers = { Version: version || <span class="branch-1 cbranch-no" title="branch not covered" >1 </span>};
+      const response = await this.api.request({
+        ...config,
+        method,
+        url: path,
+        headers,
+      });
+&nbsp;
+      return response.data;
+    } catch (error) {
+      throw error;
     }
+  }
 &nbsp;
-    async request(method: string, path: string, version: number, config: Config) {
-        try {
-            const headers: Headers = {Version: version || <span class="branch-1 cbranch-no" title="branch not covered" >1}</span>;
-            const response = await this.api.request({
-                ...config,
-                method,
-                url: path,
-                headers,
-            });
+  get(path: string, version: number, params: any) {
+    return this.request('get', path, version, { params });
+  }
 &nbsp;
-            return response.data;
-        } catch (error) {
-            throw error;
-        }
-    }
+  post(path: string, version: number, data: any) {
+    return this.request('post', path, version, { data });
+  }
 &nbsp;
-    get(path: string, version: number, params: any) {
-        return this.request("get", path, version, {params});
-    }
+  put(path: string, version: number, data: any) {
+    return this.request('put', path, version, { data });
+  }
 &nbsp;
-    post(path: string, version: number, data: any) {
-        return this.request("post", path, version, {data});
-    }
+  delete(path: string, version: number, data: any) {
+    return this.request('delete', path, version, { data });
+  }
 &nbsp;
-    put(path: string, version: number, data: any) {
-        return this.request("put", path, version, {data});
-    }
+  login(username: string, password: string) {
+    const emptyHeaders = {
+      accountId: '',
+      oauthToken: { access_token: '', token_type: '' },
+    };
+    setHeaderTokens(this.api, emptyHeaders);
 &nbsp;
-    delete(path: string, version: number, data: any) {
-        return this.request("delete", path, version, {data});
-    }
+    return this.post('session', 3, {
+      identifier: username,
+      password,
+    }).then((response) =&gt; {
+      setHeaderTokens(this.api, response);
+      return response;
+    });
+  }
 &nbsp;
-    login(username: string, password: string) {
-        return this.post("session", 3, {
-            identifier: username,
-            password,
-        }).then((response) =&gt; {
-            setHeaderTokens(this.api, response);
-            return response;
-        });
-    }
-&nbsp;
-    logout() {
-        return this.delete("session", 1, null);
-    }
+  logout() {
+    return this.delete('session', 1, null);
+  }
 }
 &nbsp;</pre></td></tr></table></pre>
 
@@ -274,7 +295,7 @@ export default class IG {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-03-31T14:05:15.108Z
+                at 2024-07-04T08:10:43.082Z
             </div>
         <script src="prettify.js"></script>
         <script>
